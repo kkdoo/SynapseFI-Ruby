@@ -96,11 +96,34 @@ module SynapsePayRest
       client.delete(path)
     end
 
+    # Sends a POST request to /batch-trans endpoint to create a new batch transaction
+    # Returns the response.
+    # 
+    # @param user_id [String]
+    # @param node_id [String] id of the from node
+    # @param payload [Hash]
+    # @see https://docs.synapsefi.com/api-references/transactions/create-batch-transactions for payload structure
+    # 
+    # @raise [SynapsePayRest::Error] may return subclasses of error based on 
+    # HTTP response from API
+    # 
+    # @return [Hash] API response
+
+    def create_batch_transaction(user_id:, node_id:, payload:, idempotency_key: nil)
+      path = create_batch_transaction_path(user_id: user_id, node_id: node_id, batch_id: batch_id)
+      client.post(path, payload, idempotency_key: idempotency_key)
+    end
+
     private
 
     def create_transaction_path(user_id:, node_id:, trans_id: nil)
       path = "/users/#{user_id}/nodes/#{node_id}/trans"
       path += "/#{trans_id}" if trans_id
+      path
+    end
+
+    def create_batch_transaction_path(user_id:, node_id:, batch_id: nil)
+      path = "/users/#{user_id}/nodes/#{node_id}/batch-trans"
       path
     end
   end
