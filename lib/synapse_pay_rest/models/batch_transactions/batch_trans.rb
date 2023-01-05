@@ -30,7 +30,6 @@ module SynapsePayRest
           user_id: node.user.id,
           node_id: node.id,
           payload: payload,
-          idempotency_key: options[:idempotency_key],
           )
         from_response(node, response)
       end
