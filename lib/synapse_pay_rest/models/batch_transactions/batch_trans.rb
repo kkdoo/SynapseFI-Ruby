@@ -6,6 +6,7 @@ module SynapsePayRest
   #
 
   class BatchTrans
+    include PayloadCreator
     # @!attribute [rw] node
     #   @return [SynapsePayRest::Node] the node to which the transaction belongs
     attr_reader :node, :id, :client_id, :client_name, :created_on
@@ -21,10 +22,11 @@ module SynapsePayRest
       # @return [SynapsePayRest::BatchTrans]
       #
 
-      def create(node:, payload:)
+      def create(node:, **options)
         raise ArgumentError, 'cannot create a batch transaction with an UnverifiedNode' if node.is_a?(UnverifiedNode)
         raise ArgumentError, 'node must be a type of BaseNode object' unless node.is_a?(BaseNode)
 
+        payload = payload_for_create(node: node, **options)
         response = node.user.client.trans.create_batch_trans(
           user_id: node.user.id,
           node_id: node.id,
@@ -53,6 +55,14 @@ module SynapsePayRest
       end
 
       private
+
+      def payload_for_create(node:, trans:,
+                             **options)
+        payload = {
+          'transactions' => trans.map {|tran| payload_for_single_transaction(tran)}
+        }
+        # optional payload fields
+      end
 
       def multiple_from_response(node, response)
         return [] if response.empty?
