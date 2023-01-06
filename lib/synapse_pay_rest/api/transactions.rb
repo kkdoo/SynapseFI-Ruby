@@ -109,8 +109,8 @@ module SynapsePayRest
     #
     # @return [Hash] API response
 
-    def create_batch_transaction(user_id:, node_id:, payload:, idempotency_key: nil)
-      path = create_batch_transaction_path(user_id: user_id, node_id: node_id, batch_id: batch_id)
+    def create_batch(user_id:, node_id:, payload:, idempotency_key: nil)
+      path = create_batch_path(user_id: user_id, node_id: node_id)
       client.post(path, payload)
     end
 
@@ -122,9 +122,8 @@ module SynapsePayRest
       path
     end
 
-    def create_batch_transaction_path(user_id:, node_id:, batch_id: nil)
-      path = "/users/#{user_id}/nodes/#{node_id}/batch-trans"
-      path
+    def create_batch_path(user_id:, node_id:)
+      "/users/#{user_id}/nodes/#{node_id}/batch-trans"
     end
   end
 end

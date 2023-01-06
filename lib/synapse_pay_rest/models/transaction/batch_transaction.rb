@@ -5,12 +5,7 @@ module SynapsePayRest
   # or knowledge of REST.
   #
 
-  class BatchTrans
-    include PayloadCreator
-    # @!attribute [rw] node
-    #   @return [SynapsePayRest::Node] the node to which the transaction belongs
-    attr_reader :node, :id, :client_id, :client_name, :created_on
-
+  class BatchTransaction < Transaction
     class << self
       # Creates a new batch transaction in the API belonging to the provided node and
       # returns a batch transaction instance from the response data.
@@ -22,16 +17,15 @@ module SynapsePayRest
       # @return [SynapsePayRest::BatchTrans]
       #
 
-      def create(node:, **options)
+      def create(node:, transactions:, **options)
         raise ArgumentError, 'cannot create a batch transaction with an UnverifiedNode' if node.is_a?(UnverifiedNode)
         raise ArgumentError, 'node must be a type of BaseNode object' unless node.is_a?(BaseNode)
 
-        payload = payload_for_create(node: node, **options)
-        response = node.user.client.trans.create_batch_trans(
+        response = node.user.client.trans.create_batch(
           user_id: node.user.id,
           node_id: node.id,
-          payload: payload
-          )
+          payload: payload_for_batch_create(transactions: transactions, **options)
+        )
         from_response(node, response)
       end
 
@@ -56,30 +50,27 @@ module SynapsePayRest
 
       private
 
-      def payload_for_create(node:, trans:,
-                             **options)
-        payload = {
-          'transactions' => trans.map {|tran| payload_for_single_transaction(tran)}
+      def payload_for_batch_create(transactions:, **options)
+        {
+          'transactions' => transactions.map{|transaction| payload_for_create(transaction)}
         }
-        # optional payload fields
       end
 
       def multiple_from_response(node, response)
-        return [] if response.empty?
-        response.map { |trans_data| from_response(node, trans_data) }
+        raise 'not impletemented yet'
       end
     end
 
-    # @note Do not call directly. Use BatchTrans.create or other class
-    #   method to instantiate via API action.
-    def initialize(**options)
-      options.each { |key, value| instance_variable_set("@#{key}", value) }
-    end
-
-
-    # Checks if two Transaction instances have same id (different instances of same record).
-    def ==(other)
-      other.instance_of?(self.class) && !id.nil? && id == other.id
-    end
+    # # @note Do not call directly. Use BatchTrans.create or other class
+    # #   method to instantiate via API action.
+    # def initialize(**options)
+    #   options.each { |key, value| instance_variable_set("@#{key}", value) }
+    # end
+    #
+    #
+    # # Checks if two Transaction instances have same id (different instances of same record).
+    # def ==(other)
+    #   other.instance_of?(self.class) && !id.nil? && id == other.id
+    # end
   end
 end
