@@ -52,7 +52,7 @@ module SynapsePayRest
 
       def payload_for_batch_create(transactions:, **options)
         {
-          'transactions' => transactions.map{|transaction| payload_for_create(transaction)}
+          'transactions' => transactions.map{|transaction| payload_for_create(**transaction)}
         }
       end
 
