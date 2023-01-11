@@ -6,6 +6,8 @@ module SynapsePayRest
   #
 
   class BatchTransaction < Transaction
+    attr_reader :node, :trans, :error_code, :http_codee, :success, :page_count
+
     class << self
       # Creates a new batch transaction in the API belonging to the provided node and
       # returns a batch transaction instance from the response data.
@@ -42,8 +44,7 @@ module SynapsePayRest
           success:       response['success'],
           page_count:    response['page_count'],
           trans_count:   response['trans_count'],
-          trans:         response['trans'],
-
+          trans:         response['trans'].map{|tx_response| Transaction.from_response(node, tx_response)},
         }
         self.new(**args)
       end
@@ -60,17 +61,5 @@ module SynapsePayRest
         raise 'not impletemented yet'
       end
     end
-
-    # # @note Do not call directly. Use BatchTrans.create or other class
-    # #   method to instantiate via API action.
-    # def initialize(**options)
-    #   options.each { |key, value| instance_variable_set("@#{key}", value) }
-    # end
-    #
-    #
-    # # Checks if two Transaction instances have same id (different instances of same record).
-    # def ==(other)
-    #   other.instance_of?(self.class) && !id.nil? && id == other.id
-    # end
   end
 end
