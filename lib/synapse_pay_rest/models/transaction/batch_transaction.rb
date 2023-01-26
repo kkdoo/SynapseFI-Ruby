@@ -51,7 +51,7 @@ module SynapsePayRest
 
       private
 
-      def payload_for_create_transaction(to_type:, to_id:, amount:, currency:, ip:, **options)
+      def payload_for_single_transaction(to_type:, to_id:, amount:, currency:, ip:, **options)
         payload = {
           'to' => {
             'type' => to_type,
@@ -93,7 +93,7 @@ module SynapsePayRest
 
       def payload_for_batch_create(transactions:, **options)
         {
-          'transactions' => transactions.map{|transaction| payload_for_create_transaction(**transaction)}
+          'transactions' => transactions.map{|transaction| payload_for_single_transaction(**transaction)}
         }
       end
 
