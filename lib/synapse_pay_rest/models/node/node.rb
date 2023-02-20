@@ -22,6 +22,7 @@ module SynapsePayRest
       'CHECK-US'               => CheckUsNode,
       'CLEARING-US'            => ClearingUsNode,
       'IB-DEPOSIT-US'          => IbDepositUsNode,
+      'IC-DEPOSIT-US'          => IcDepositUsNode,
       'IB-SUBACCOUNT-US'       => IbSubaccountUsNode,
       'INTERCHANGE-US'         => InterchangeUsNode,
       'CARD-US'                => CardUsNode,
