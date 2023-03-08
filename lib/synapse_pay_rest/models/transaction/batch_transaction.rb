@@ -26,7 +26,7 @@ module SynapsePayRest
         response = node.user.client.trans.create_batch(
           user_id: node.user.id,
           node_id: node.id,
-          payload: payload_for_batch_create(transactions: transactions, **options)
+          payload: payload_for_create(transactions: transactions, **options)
         )
         from_response(node, response)
       end
@@ -51,7 +51,13 @@ module SynapsePayRest
 
       private
 
-      def payload_for_single_transaction(to_type:, to_id:, amount:, currency:, ip:, **options)
+      def payload_for_create(transactions:, **options)
+        {
+          'transactions' => transactions.map{|transaction| payload_for_transaction(**transaction)}
+        }
+      end
+
+      def payload_for_transaction(to_type:, to_id:, amount:, currency:, ip:, **options)
         payload = {
           'to' => {
             'type' => to_type,
@@ -88,13 +94,6 @@ module SynapsePayRest
         fees = options[:fees] if options[:fees]
         payload['fees'] = fees if fees.any?
         payload
-      end
-
-
-      def payload_for_batch_create(transactions:, **options)
-        {
-          'transactions' => transactions.map{|transaction| payload_for_single_transaction(**transaction)}
-        }
       end
 
       def multiple_from_response(node, response)
