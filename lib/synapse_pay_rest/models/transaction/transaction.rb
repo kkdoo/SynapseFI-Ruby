@@ -151,8 +151,7 @@ module SynapsePayRest
 
       private
 
-      def payload_for_create(node:, to_type:, to_id:, amount:, currency:, ip:,
-        **options)
+      def payload_for_create(node:, to_type:, to_id:, amount:, currency:, ip:, **options)
         payload = {
           'to' => {
             'type' => to_type,
