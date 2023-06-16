@@ -92,7 +92,7 @@ module SynapsePayRest
         headers = headers.merge({'X-SP-IDEMPOTENCY-KEY' => options[:idempotency_key]})
       end
 
-      response = with_error_handling { RestClient::Request.execute(:method => :post, :url => full_url(path), :payload => payload.to_json, :headers => headers, :timeout => 300) }
+      response = with_error_handling { RestClient::Request.execute(:method => :post, :url => full_url(path), :payload => payload.to_json, :headers => headers, :timeout => ENV['TIMEOUT'] || 25) }
       p 'RESPONSE:', JSON.parse(response) if @logging
       JSON.parse(response)
     end
@@ -106,7 +106,7 @@ module SynapsePayRest
     # 
     # @return [Hash] API response
     def patch(path, payload)
-      response = with_error_handling { RestClient::Request.execute(:method => :patch, :url => full_url(path), :payload => payload.to_json, :headers => headers, :timeout => 300) }
+      response = with_error_handling { RestClient::Request.execute(:method => :patch, :url => full_url(path), :payload => payload.to_json, :headers => headers, :timeout => ENV['TIMEOUT'] || 25) }
       p 'RESPONSE:', JSON.parse(response) if @logging
       JSON.parse(response)
     end

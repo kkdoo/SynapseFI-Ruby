@@ -3,7 +3,7 @@ module SynapsePayRest
   # from API calls. This is built on top of the SynapsePayRest::Transactions class and
   # is intended to make it easier to use the API without knowing payload formats
   # or knowledge of REST.
-  # 
+  #
   # @todo use mixins to remove duplication between Node and BaseNode.
   # @todo reduce duplicated logic between User/BaseNode/Transaction
   class Transaction
@@ -17,7 +17,7 @@ module SynapsePayRest
     class << self
       # Creates a new transaction in the API belonging to the provided node and
       # returns a transaction instance from the response data.
-      # 
+      #
       # @param node [SynapsePayRest::BaseNode] node to which the transaction belongs
       # @param to_id [String] node id of the receiving node
       # @param to_type [String] node type of the receiving node
@@ -35,9 +35,9 @@ module SynapsePayRest
       # @param idempotency_key [String] (optional)
       #
       # @raise [SynapsePayRest::Error] if HTTP error or invalid argument format
-      # 
+      #
       # @return [SynapsePayRest::Transaction]
-      # 
+      #
       # @todo allow either to_node or to_type/to_id
       # @todo allow node to be entered as alternative to fee_to node
       # @todo validate if fee_to node is synapse-us
@@ -65,12 +65,12 @@ module SynapsePayRest
 
       # Queries the API for a transaction belonging to the supplied node by transaction id
       # and returns a Transaction instance if found.
-      # 
+      #
       # @param node [SynapsePayRest::BaseNode] node to which the transaction belongs
       # @param id [String] id of the transaction to find
-      # 
+      #
       # @raise [SynapsePayRest::Error] if not found or other HTTP error
-      # 
+      #
       # @return [SynapsePayRest::Transaction]
       def find(node:, id:)
         raise ArgumentError, 'node must be a type of BaseNode object' unless node.is_a?(BaseNode)
@@ -86,13 +86,13 @@ module SynapsePayRest
 
       # Queries the API for all transactions belonging to the supplied node and returns
       # them as Transaction instances.
-      # 
+      #
       # @param node [SynapsePayRest::BaseNode] node to which the transaction belongs
       # @param page [String,Integer] (optional) response will default to 1
       # @param per_page [String,Integer] (optional) response will default to 20
-      # 
+      #
       # @raise [SynapsePayRest::Error]
-      # 
+      #
       # @return [Array<SynapsePayRest::Transaction>]
       def all(node:, page: nil, per_page: nil)
         raise ArgumentError, 'node must be a type of BaseNode object' unless node.is_a?(BaseNode)
@@ -112,9 +112,9 @@ module SynapsePayRest
       end
 
       # Creates a Transaction from a response hash.
-      # 
+      #
       # @note Shouldn't need to call this directly.
-      # 
+      #
       # @todo convert the nodes and users in response into User/Node objects
       # @todo rework to handle multiple fees
       def from_response(node, response)
@@ -146,13 +146,12 @@ module SynapsePayRest
           args[:fee_note]   = response['fees'].first['note']
           args[:fee_to_id]  = response['fees'].first['to']['id']
         end
-        self.new(args)
+        self.new(**args)
       end
 
       private
 
-      def payload_for_create(node:, to_type:, to_id:, amount:, currency:, ip:,
-        **options)
+      def payload_for_create(node:, to_type:, to_id:, amount:, currency:, ip:, **options)
         payload = {
           'to' => {
             'type' => to_type,
@@ -203,11 +202,11 @@ module SynapsePayRest
     end
 
     # Adds a comment to the transaction's timeline/recent_status fields.
-    # 
+    #
     # @param comment [String]
-    # 
+    #
     # @raise [SynapsePayRest::Error]
-    # 
+    #
     # @return [Array<SynapsePayRest::Transaction>] (self)
     def add_comment(comment)
       payload = {'comment' => comment}
@@ -227,9 +226,9 @@ module SynapsePayRest
     end
 
     # Cancels this transaction if it has not already settled.
-    # 
+    #
     # @raise [SynapsePayRest::Error]
-    # 
+    #
     # @return [Array<SynapsePayRest::Transaction>] (self)
     def cancel
       response = node.user.client.trans.delete(

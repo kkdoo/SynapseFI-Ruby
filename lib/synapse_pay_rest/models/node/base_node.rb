@@ -15,7 +15,7 @@ module SynapsePayRest
     # @!attribute [r] permission
     #   @return [String] https://docs.synapsepay.com/docs/node-resources#section-node-permissions
     attr_reader :user, :id, :nickname, :supp_id, :currency, :is_active, :permission,
-                :account_number, :routing_number, :name_on_account, :address,
+                :account_number, :routing_number, :speeds, :name_on_account, :address,
                 :bank_name, :bank_id, :bank_pw, :account_class, :account_type,
                 :correspondent_routing_number, :correspondent_bank_name,
                 :correspondent_address, :correspondent_swift, :account_id, :balance,
@@ -94,6 +94,7 @@ module SynapsePayRest
           account_class:                     response['info']['class'],
           account_number:                    response['info']['account_num'],
           routing_number:                    response['info']['routing_num'],
+          speeds:                            response['info']['speeds'],
           address:                           response['info']['address'],
           swift:                             response['info']['swift'],
           ifsc:                              response['info']['ifsc'],
