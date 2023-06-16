@@ -13,7 +13,7 @@ module SynapsePayRest
     #   @return [String] https://docs.synapsepay.com/docs/user-resources#section-user-permissions
     attr_reader :client, :id, :logins, :phone_numbers, :legal_names, :note,
                 :supp_id, :is_business, :cip_tag, :permission
-    attr_accessor :refresh_token, :base_documents, :oauth_key, :expires_in, :flag, :ips
+    attr_accessor :refresh_token, :base_documents, :oauth_key, :expires_in, :flag, :ips, :expires_at
 
     class << self
       # Creates a new user in the API and returns a User instance from the
@@ -162,7 +162,8 @@ module SynapsePayRest
           flag:              nil,
           ips:               nil,
           oauth_key:         nil,
-          expires_in:        nil
+          expires_in:        nil,
+          expires_at:        nil
         )
 
         if response.has_key?('flag')
@@ -204,11 +205,13 @@ module SynapsePayRest
       response        = client.users.refresh(user_id: id, payload: payload_for_refresh)
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
+      self.expires_at = response['expires_at']
       self
     rescue SynapsePayRest::Error::Conflict => e
       response        = client.users.refresh(user_id: id, payload: refresh_user_token_payload)
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
+      self.expires_at = response['expires_at']
     end
 
     # Updates the given key value pairs.
