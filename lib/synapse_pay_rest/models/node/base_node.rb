@@ -28,6 +28,8 @@ module SynapsePayRest
                 :card_type, :access_token, :portfolio_BTC, :portfolio_ETH, :card_style_id,
                 :monthly_withdrawals_remaining
 
+    delegate  :expires_at, to: :user
+
     class << self
       # Creates a new node in the API associated to the provided user and
       # returns a node instance from the response data. See subclasses for type-specific
