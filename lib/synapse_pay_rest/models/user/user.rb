@@ -826,7 +826,7 @@ module SynapsePayRest
 
     def refresh_user_token_payload
       response = client.users.get(user_id: self.id)
-      {'refresh_token' => response['refresh_token'] }
+      {'refresh_token' => response['refresh_token']}
     end
 
     def payload_for_refresh
