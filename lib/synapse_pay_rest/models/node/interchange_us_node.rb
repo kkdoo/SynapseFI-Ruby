@@ -12,7 +12,7 @@ module SynapsePayRest
           exp_date: exp_date,
           document_id: document_id
         }.merge(options)
-        super(args)
+        super(**args)
       end
     end
   end
