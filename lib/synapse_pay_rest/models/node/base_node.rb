@@ -15,7 +15,7 @@ module SynapsePayRest
     # @!attribute [r] permission
     #   @return [String] https://docs.synapsepay.com/docs/node-resources#section-node-permissions
     attr_reader :user, :id, :nickname, :supp_id, :currency, :is_active, :permission,
-                :account_number, :routing_number, :name_on_account, :address,
+                :account_number, :routing_number, :speeds, :name_on_account, :address,
                 :bank_name, :bank_id, :bank_pw, :account_class, :account_type,
                 :correspondent_routing_number, :correspondent_bank_name,
                 :correspondent_address, :correspondent_swift, :account_id, :balance,
@@ -27,6 +27,8 @@ module SynapsePayRest
                 :atm_withdrawal_limit, :max_pin_attempts, :pos_withdrawal_limit, :security_alerts,
                 :card_type, :access_token, :portfolio_BTC, :portfolio_ETH, :card_style_id,
                 :monthly_withdrawals_remaining
+
+    delegate  :expires_at, to: :user
 
     class << self
       # Creates a new node in the API associated to the provided user and
@@ -94,6 +96,7 @@ module SynapsePayRest
           account_class:                     response['info']['class'],
           account_number:                    response['info']['account_num'],
           routing_number:                    response['info']['routing_num'],
+          speeds:                            response['info']['speeds'],
           address:                           response['info']['address'],
           swift:                             response['info']['swift'],
           ifsc:                              response['info']['ifsc'],
