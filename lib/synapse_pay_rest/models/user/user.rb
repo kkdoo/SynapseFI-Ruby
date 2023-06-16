@@ -212,6 +212,7 @@ module SynapsePayRest
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
       self.expires_at = response['expires_at']
+      self
     end
 
     # Updates the given key value pairs.
