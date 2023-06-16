@@ -205,6 +205,10 @@ module SynapsePayRest
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
       self
+    rescue SynapsePayRest::Error::Conflict => e
+      response        = client.users.refresh(user_id: id, payload: refresh_user_token_payload)
+      self.oauth_key  = response['oauth_key']
+      self.expires_in = response['expires_in']
     end
 
     # Updates the given key value pairs.
@@ -830,7 +834,7 @@ module SynapsePayRest
     end
 
     def payload_for_refresh
-      refresh_user_token_payload
+      {'refresh_token' => refresh_token}
     end
   end
 end
