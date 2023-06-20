@@ -206,7 +206,7 @@ module SynapsePayRest
     rescue SynapsePayRest::Error::Conflict => e
       response = client.users.refresh(user_id: id, payload: refresh_user_token_payload)
     ensure
-      client.update_headers(oauth_key: response['oauth_key'])
+      client.http_client.update_headers(oauth_key: response['oauth_key'])
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
       self.expires_at = response['expires_at']
