@@ -202,13 +202,11 @@ module SynapsePayRest
     #
     # @return [SynapsePayRest::User] (new instance with updated tokens)
     def authenticate
-      response        = client.users.refresh(user_id: id, payload: payload_for_refresh)
-      self.oauth_key  = response['oauth_key']
-      self.expires_in = response['expires_in']
-      self.expires_at = response['expires_at']
-      self
+      response = client.users.refresh(user_id: id, payload: payload_for_refresh)
     rescue SynapsePayRest::Error::Conflict => e
-      response        = client.users.refresh(user_id: id, payload: refresh_user_token_payload)
+      response = client.users.refresh(user_id: id, payload: refresh_user_token_payload)
+    ensure
+      client.update_headers(oauth_key: response['oauth_key'])
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
       self.expires_at = response['expires_at']
