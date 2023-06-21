@@ -74,11 +74,6 @@ module SynapsePayRest
     # @return [Hash] API response
     def refresh(user_id:, payload:)
       path = "/oauth/#{user_id}"
-      response = client.post(path, payload)
-      client.update_headers(oauth_key: response['oauth_key']) if response['oauth_key']
-      response
-    rescue NoMethodError => e
-      path = "/oauth/#{user_id}"
       response = client.http_client.post(path, payload)
       client.update_headers(oauth_key: response['oauth_key']) if response['oauth_key']
       response
