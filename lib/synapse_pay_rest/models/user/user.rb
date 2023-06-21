@@ -203,14 +203,12 @@ module SynapsePayRest
     # @return [SynapsePayRest::User] (new instance with updated tokens)
     def authenticate
       response = client.users.refresh(user_id: id, payload: payload_for_refresh)
-      client.http_client.update_headers(oauth_key: response['oauth_key'])
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
       self.expires_at = response['expires_at']
       self
     rescue SynapsePayRest::Error::Conflict => e
       response = client.users.refresh(user_id: id, payload: refresh_user_token_payload)
-      client.http_client.update_headers(oauth_key: response['oauth_key'])
       self.oauth_key  = response['oauth_key']
       self.expires_in = response['expires_in']
       self.expires_at = response['expires_at']
@@ -375,10 +373,10 @@ module SynapsePayRest
     # @raise [SynapsePayRest::Error]
     #
     # @return [Array<String>] array of devices (phone number / email)
-    def register_fingerprint(fingerprint)
+    def register_fingerprint(fingerprint, is_active: true, is_protected: true)
       raise ArgumentError, 'fingerprint must be a String' unless fingerprint.is_a?(String)
 
-      client.http_client.update_headers(fingerprint: fingerprint)
+      client.http_client.update_headers(fingerprint: { fingerprint: fingerprint, is_active: is_active, is_protected: is_protected })
       response = client.users.refresh(user_id: id, payload: payload_for_refresh)
       response['phone_numbers']
     end
