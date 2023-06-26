@@ -12,7 +12,7 @@ module SynapsePayRest
     # @!attribute [r] permission
     #   @return [String] https://docs.synapsepay.com/docs/user-resources#section-user-permissions
     attr_reader :client, :id, :logins, :phone_numbers, :legal_names, :note,
-                :supp_id, :is_business, :cip_tag, :permission, :expired?
+                :supp_id, :is_business, :cip_tag, :permission
     attr_accessor :refresh_token, :base_documents, :oauth_key, :expires_in, :flag, :ips, :expires_at
 
     class << self
