@@ -12,7 +12,7 @@ module SynapsePayRest
     # @!attribute [r] permission
     #   @return [String] https://docs.synapsepay.com/docs/user-resources#section-user-permissions
     attr_reader :client, :id, :logins, :phone_numbers, :legal_names, :note,
-                :supp_id, :is_business, :cip_tag, :permission
+                :supp_id, :is_business, :cip_tag, :permission, :expired?
     attr_accessor :refresh_token, :base_documents, :oauth_key, :expires_in, :flag, :ips, :expires_at
 
     class << self
@@ -807,6 +807,11 @@ module SynapsePayRest
 
     def get_statement()
       Statement.by_user(client: self.client, user:self)
+    end
+
+    # Check if user is expired based on expires_at value
+    def expired?
+      expires_at && expires_at < Time.now
     end
 
     # Checks if two User instances have same id (different instances of same record).
