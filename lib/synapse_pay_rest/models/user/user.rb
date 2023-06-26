@@ -811,7 +811,7 @@ module SynapsePayRest
 
     # Check if user is expired based on expires_at value
     def expired?
-      expires_at && expires_at < Time.now
+      expires_at && Time.at(expires_at.to_i) < Time.now
     end
 
     # Checks if two User instances have same id (different instances of same record).
