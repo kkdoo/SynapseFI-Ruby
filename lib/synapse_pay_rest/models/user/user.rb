@@ -809,6 +809,11 @@ module SynapsePayRest
       Statement.by_user(client: self.client, user:self)
     end
 
+    # Check if user is expired based on expires_at value
+    def expired?
+      expires_at && Time.at(expires_at.to_i) < Time.now
+    end
+
     # Checks if two User instances have same id (different instances of same record).
     def ==(other)
       other.instance_of?(self.class) && !id.nil? && id == other.id
