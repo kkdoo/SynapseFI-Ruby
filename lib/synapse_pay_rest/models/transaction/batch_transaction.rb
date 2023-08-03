@@ -72,12 +72,13 @@ module SynapsePayRest
           }
         }
         # optional payload fields
-        payload['extra']['asset']      = options[:asset]      if options[:asset]
-        payload['extra']['same_day']   = options[:same_day]   if options[:same_day]
-        payload['extra']['supp_id']    = options[:supp_id]    if options[:supp_id]
-        payload['extra']['note']       = options[:note]       if options[:note]
-        payload['extra']['process_on'] = options[:process_in] if options[:process_in]
-        payload['extra']['group_id']   = options[:group_id]   if options[:group_id]
+        payload['extra']['asset']             = options[:asset]             if options[:asset]
+        payload['extra']['same_day']          = options[:same_day]          if options[:same_day]
+        payload['extra']['supp_id']           = options[:supp_id]           if options[:supp_id]
+        payload['extra']['note']              = options[:note]              if options[:note]
+        payload['extra']['process_on']        = options[:process_in]        if options[:process_in]
+        payload['extra']['group_id']          = options[:group_id]          if options[:group_id]
+        payload['extra']['idempotency_key']   = options[:idempotency_key]   if options[:idempotency_key]
         other = {}
         other['attachments'] = options[:attachments] if options[:attachments]
         payload['extra']['other'] = other if other.any?
