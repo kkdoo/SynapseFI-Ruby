@@ -77,6 +77,7 @@ require 'synapse_pay_rest/models/subnet/subnet'
 
 # transaction-related classes
 require 'synapse_pay_rest/models/transaction/transaction'
+require 'synapse_pay_rest/models/transaction/batch_transaction'
 
 # subscription-related classes
 require 'synapse_pay_rest/models/subscription/subscription'

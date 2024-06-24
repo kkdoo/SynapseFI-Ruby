@@ -3,25 +3,25 @@ module SynapsePayRest
   # from API calls. This is built on top of the SynapsePayRest::Subnets class and
   # is intended to make it easier to use the API without knowing payload formats
   # or knowledge of REST.
-  # 
+  #
   class Subnet
     # @!attribute [rw] node
-    attr_reader :id, :account_num, :allowed, :client_id, :client_name, :nickname, :node, :routing_num_ach, 
+    attr_reader :id, :account_num, :allowed, :client_id, :client_name, :nickname, :node, :routing_num_ach,
                 :routing_num_wire
-                
+
 
     class << self
       # Creates a new subnet in the API belonging to the provided node and
       # returns a subnet instance from the response data.
-      # 
+      #
       # @param nickname [String] any nicknames
       # @param node [SynapsePayRest::BaseNode] node to which the Subnet belongs
       # @see https://docs.synapsepay.com/docs/subnets
       #
       # @raise [SynapsePayRest::Error] if HTTP error or invalid argument format
-      # 
+      #
       # @return [SynapsePayRest::Subnet]
-      # 
+      #
       def create(node:, nickname:, **options)
         raise ArgumentError, 'cannot create a transaction with an UnverifiedNode' if node.is_a?(UnverifiedNode)
         raise ArgumentError, 'node must be a type of BaseNode object' unless node.is_a?(BaseNode)
@@ -42,12 +42,12 @@ module SynapsePayRest
 
       # Queries the API for a subnet belonging to the supplied node by subnet id
       # and returns a Subnet n instance if found.
-      # 
+      #
       # @param node [SynapsePayRest::BaseNode] node to which the subnet belongs
       # @param id [String] id of the subnet to find
-      # 
+      #
       # @raise [SynapsePayRest::Error] if not found or other HTTP error
-      # 
+      #
       # @return [SynapsePayRest::Subnet]
       def find(node:, id:)
         raise ArgumentError, 'node must be a type of BaseNode object' unless node.is_a?(BaseNode)
@@ -63,13 +63,13 @@ module SynapsePayRest
 
       # Queries the API for all subnets belonging to the supplied node and returns
       # them as Subnet instances.
-      # 
+      #
       # @param node [SynapsePayRest::BaseNode] node to which the subnet belongs
       # @param page [String,Integer] (optional) response will default to 1
       # @param per_page [String,Integer] (optional) response will default to 20
-      # 
+      #
       # @raise [SynapsePayRest::Error]
-      # 
+      #
       # @return [Array<SynapsePayRest::Subnet>]
       def all(node:, page: nil, per_page: nil)
         raise ArgumentError, 'node must be a type of BaseNode object' unless node.is_a?(BaseNode)
@@ -89,9 +89,9 @@ module SynapsePayRest
       end
 
       # Creates a Subnet from a response hash.
-      # 
+      #
       # @note Shouldn't need to call this directly.
-      # 
+      #
       def from_response(node, response)
         args = {
           node:               node,
@@ -106,7 +106,7 @@ module SynapsePayRest
           routing_num_wire:   response['routing_num']['wire'],
           user_id:            response['user_id']
         }
-        self.new(args)
+        self.new(**args)
       end
 
       private
@@ -130,11 +130,11 @@ module SynapsePayRest
     end
 
     # Changes Subnet's allowed permission from 'CREDIT' to 'LOCKED'.
-    # 
+    #
     # @param comment [String]
-    # 
+    #
     # @raise [SynapsePayRest::Error]
-    # 
+    #
     # @return [Array<SynapsePayRest::Subnet>] (self)
     def lock
       payload = {'allowed' => 'LOCKED'}
